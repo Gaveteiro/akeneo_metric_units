@@ -5,7 +5,6 @@ require 'pry'
 require 'yaml'
 
 module Akeneo
-
   class CustomMeasureUnity
     def initialize; end
 
@@ -52,7 +51,7 @@ module Akeneo
     end
 
     def list_family_codes
-      family_codes = read_sheet_units.map { |row| row[:family_code_pascal] }.uniq.reject(&:nil?)
+      read_sheet_units.map { |row| row[:family_code_pascal] }.uniq.reject(&:nil?)
     end
 
     def families_hash(language)
@@ -67,7 +66,7 @@ module Akeneo
     end
 
     def remove_nil_keys_or_values_from_hash(any_map)
-      any_map.reject { |key| key.nil? }.reject { |_key, value| value.nil? }
+      any_map.reject{ |key| key.nil? }.reject { |_key, value| value.nil? }
     end
 
     def pim_measure_hash(language)
@@ -84,19 +83,11 @@ module Akeneo
 
     def measure_family_hash(family_name)
       units_from_family = read_sheet_units.map.select { |row| row[:family_code_pascal] == family_name }
-      standard_unity_code = standard_unity_code(units_from_family)
+      std_unity_code = standard_unity_code(units_from_family)
       units = units_details(units_from_family)
-
-      if standard_unity_code.nil?
-        {
-          'units' => units
-        }
-      else
-        {
-          'standard' => standard_unity_code,
-          'units' => units
-        }
-      end
+      units_hash = { 'units' => units }
+      std_hash = { 'standard' => std_unity_code }
+      std_hash.merge(units_hash) unless std_unity_code.nil?
     end
 
     def measure_config
