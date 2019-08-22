@@ -82,12 +82,16 @@ module Akeneo
     end
 
     def measure_family_hash(family_name)
+      #if family_name == "Energy"
+      #  binding.pry
+      #end
       units_from_family = read_sheet_units.map.select { |row| row[:family_code_pascal] == family_name }
       std_unity_code = standard_unity_code(units_from_family)
       units = units_details(units_from_family)
       units_hash = { 'units' => units }
-      std_hash = { 'standard' => std_unity_code }
-      std_hash.merge(units_hash) unless std_unity_code.nil?
+      return units_hash if std_unity_code.nil?
+
+      { 'standard' => std_unity_code }.merge(units_hash)
     end
 
     def measure_config
