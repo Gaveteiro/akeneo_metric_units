@@ -82,9 +82,6 @@ module Akeneo
     end
 
     def measure_family_hash(family_name)
-      #if family_name == "Energy"
-      #  binding.pry
-      #end
       units_from_family = read_sheet_units.map.select { |row| row[:family_code_pascal] == family_name }
       std_unity_code = standard_unity_code(units_from_family)
       units = units_details(units_from_family)
@@ -103,7 +100,7 @@ module Akeneo
 
     def standard_unity_code(unity_rows)
       selected_rows = unity_rows.select { |row| row[:default_unity] == "Sim" }
-      selected_rows.empty? ? nil : selected_rows.first[:unity_code]
+      selected_rows.empty? ? unity_rows.first[:unity_code] : selected_rows.first[:unity_code]
     end
 
     def options
